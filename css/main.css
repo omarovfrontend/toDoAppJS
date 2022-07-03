@@ -1,7 +1,14 @@
 body {
   background-color: #E4E5E7;
-  padding-top: 50px;
-  padding-bottom: 30px;
+}
+
+.wrapper {
+  padding: 30px 0;
+  position: relative;
+}
+
+.task-list {
+  text-align: center;
 }
  
 .aside {
@@ -22,5 +29,18 @@ body {
 }
 
 .alert {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 5px;
   display: none;
+}
+
+.card {
+  background-color: transparent;
+  border: none;
+}
+
+.list-group-item {
+  margin-bottom: 10px;
 }

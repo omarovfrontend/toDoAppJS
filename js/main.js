@@ -2,8 +2,9 @@
 const form = document.querySelector('#newTaskForm');
 const tasksList = document.querySelector('#tasksList');
 const alertWarning = document.querySelector('.alert-warning');
-const alertSuccess = document.querySelector('.alert-success');
 const alertDanger = document.querySelector('.alert-danger');
+const alertSuccess = document.querySelector('.alert-success');
+console.log(alertSuccess); // для выполненных задач
 
 // Массив для хранения задач
 let tasks = [];
@@ -13,12 +14,16 @@ if (localStorage.getItem('tasks')) {
   tasks.forEach((item) => {
     // Разметка для новой задачи
     const taskHtml = `
-            <li class="list-group-item d-flex justify-content-between">
-                <span class="task-title">${item}</span>
-                <button type="button" data-action="delete-task" 
-                class="btn btn-light align-self-end">Удалить</button>
-            </li>
-        `;
+      <li class="list-group-item d-flex justify-content-between">
+        <span class="task-title">${item}</span>
+        <button type="button"
+                data-action="delete-task"
+                class="btn btn-light
+                align-self-end"
+        >Удалить
+        </button>
+      </li>
+    `;
 
     // Вставляем новую задачу в общий список задач
     tasksList.insertAdjacentHTML('afterbegin', taskHtml);
@@ -27,7 +32,7 @@ if (localStorage.getItem('tasks')) {
 
 // 2. Отследить событие отправки формы
 form.addEventListener('submit', (event) => {
-  event.preventDefault(); // Отмена стандартного поведения
+  event.preventDefault();
 
   const taskInput = document.querySelector('#addNewTask'); // Находим инпут
   const taskText = taskInput.value; // Берем значение из инпута
@@ -40,66 +45,54 @@ form.addEventListener('submit', (event) => {
 
   // Формируем разметку для новой задачи
   const taskHtml = `
-        <li class="list-group-item d-flex justify-content-between">
-            <span class="task-title">${taskText}</span>
-            <button type="button" data-action="delete-task" 
-            class="btn btn-light align-self-end">Удалить</button>
-        </li>
-    `;
+    <li class="list-group-item d-flex justify-content-between">
+      <span class="task-title">${taskText}</span>
+      <button type="button"
+              data-action="delete-task"
+              class="btn btn-light
+              align-self-end"
+      >Удалить
+      </button>
+    </li>
+  `;
 
   // Вставляем новую задачу в общий список задач
   tasksList.insertAdjacentHTML('beforeend', taskHtml); // этот метод позволяет добавлять разметку внутрь блока, принимает 2 аргумента, 1) куда будет добавлен, и 2) что мы добавляем
-
-  // Очищаем поле ввода
   taskInput.value = '';
 
   // показываем уведомления об успехе операции
   alertWarning.style.display = 'block';
   setTimeout(() => {
     alertWarning.style.display = 'none';
-  }, 1000);
+  }, 1500);
 });
 
-// Удаление задач
-// Прослушка клика внутри списка с задачами
-tasksList.addEventListener('click', (event) => {
+// Удаление задач, прослушка клика внутри списка с задачами
+tasksList.addEventListener('click', (e) => {
+  e.preventDefault();
+
   // Проверка клика по кнопке 'Удалить'
-  if (event.target.getAttribute('data-action') === 'delete-task') {
-    // Удаляем задачу из массива tasks
-
+  if (e.target.getAttribute('data-action') === 'delete-task') {
     // 1. Получить текст задачи
-    const taskText = event.target.closest('li').querySelector('.task-title').textContent;
+    const taskText = e.target.closest('li').querySelector('.task-title').textContent;
 
-    // 2. Определить индекс задачи в массиве tasks
-    /* .indexOf(value)
-        * tasks = ['Первая', 'Вторая', 'Третья']
-        * tasks.indexOf('Вторая') => 1
-        *
-        * */
-    const taskIndex = tasks.indexOf(taskText);
-
-    // 3. Удалить задачу из массива
-    /* .splice(index, count)
-       * Удалить один элемент из массива, начиная (включая) с индекса 2
-       * tasks.splice(2,1);
-       *
-       * */
+    const taskIndex = tasks.indexOf(taskText); // index задачи
     tasks.splice(taskIndex, 1);
 
     // Сохраняем в LocaLStorage JSON строку от массива tasks под ключом tasks
     localStorage.setItem('tasks', JSON.stringify(tasks));
 
     // Обращаемся к родителю кнопки (к тегу <li>) и удаляем его
-    event.target.parentElement.remove();
-  }
+    e.target.parentElement.remove();
 
-  alertDanger.style.display = 'block';
-  setTimeout(() => {
-    alertDanger.style.display = 'none';
-  }, 1000);
+    alertDanger.style.display = 'block';
+    setTimeout(() => {
+      alertDanger.style.display = 'none';
+    }, 1500);
+  }
 });
 
-// alertSuccess.style.display = 'block';   // задача выполнена
+// alertSuccess.style.display = 'block';
 // setTimeout(() => {
-//     alertSuccess.style.display = 'none';
+//   alertSuccess.style.display = 'none';
 // }, 1500);

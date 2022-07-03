@@ -13,5 +13,6 @@ module.exports = {
   },
   rules: {
     'no-comment': 0,
+    'no-console': 0,
   },
 };
